@@ -16,6 +16,7 @@ object NetherPortalDetector {
     private fun isEmpty(block: Block): Boolean = when (block.type) {
         Material.AIR, Material.CAVE_AIR, Material.VOID_AIR,
         Material.FIRE, Material.SOUL_FIRE, Material.NETHER_PORTAL -> true
+
         else -> false
     }
 
@@ -33,8 +34,6 @@ object NetherPortalDetector {
             width in MIN_WIDTH..MAX_WIDTH && height in MIN_HEIGHT..MAX_HEIGHT
 
         fun isEmptyValidPortal(): Boolean = isValid() && numPortalBlocks == 0
-
-        fun isComplete(): Boolean = isValid() && numPortalBlocks == width * height
     }
 
     fun wouldIgniteCreatePortal(ignitedBlock: Block, preferredAxis: Axis = Axis.X): Boolean {
