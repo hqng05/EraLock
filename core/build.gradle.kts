@@ -1,8 +1,7 @@
 plugins {
-    kotlin("jvm")
-    java
     alias(libs.plugins.shadow)
     alias(libs.plugins.run.paper)
+    `maven-publish`
 }
 
 kotlin {
@@ -58,6 +57,17 @@ tasks {
         val props = mapOf("version" to version)
         filesMatching("plugin.yml") {
             expand(props)
+        }
+    }
+}
+
+publishing {
+    publications {
+        create<MavenPublication>("maven") {
+            groupId = project.group.toString()
+            artifactId = project.name
+            version = project.version.toString()
+            from(components["shadow"])
         }
     }
 }

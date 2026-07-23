@@ -1,11 +1,18 @@
 plugins {
-    kotlin("jvm")
-    java
+    `maven-publish`
 }
 
 kotlin {
     jvmToolchain(21)
 }
 
-// EraLock API — pure Kotlin module, no Bukkit dependency.
-// Other plugins can depend on this to interact with EraLock.
+publishing {
+    publications {
+        create<MavenPublication>("maven") {
+            groupId = project.group.toString()
+            artifactId = project.name
+            version = project.version.toString()
+            from(components["java"])
+        }
+    }
+}
