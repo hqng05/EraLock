@@ -14,7 +14,8 @@ object NetherPortalDetector {
     private fun isFrameBlock(block: Block): Boolean = block.type == Material.OBSIDIAN
 
     private fun isEmpty(block: Block): Boolean = when (block.type) {
-        Material.AIR, Material.FIRE, Material.SOUL_FIRE, Material.NETHER_PORTAL -> true
+        Material.AIR, Material.CAVE_AIR, Material.VOID_AIR,
+        Material.FIRE, Material.SOUL_FIRE, Material.NETHER_PORTAL -> true
         else -> false
     }
 
@@ -64,34 +65,33 @@ object NetherPortalDetector {
     private fun calculateBottomLeft(startPos: Block, rightDir: BlockFace): Block? {
         var pos = startPos
         val minY = pos.world.minHeight
-        val floorLimit = maxOf(minY, pos.y - 21)
+        val floorLimit = maxOf(minY, pos.y - MAX_WIDTH)
 
         while (pos.y > floorLimit && isEmpty(pos.getRelative(BlockFace.DOWN))) {
             pos = pos.getRelative(BlockFace.DOWN)
         }
 
         val leftDir = rightDir.oppositeFace
-        val edge = getDistanceUntilEdgeAboveFrame(pos, leftDir) - 1
-        if (edge < 0) return null
-        return pos.getRelative(leftDir, edge)
+        val stepsToFrame = traceRowToFrame(pos, leftDir)
+        if (stepsToFrame <= 0) return null
+        return pos.getRelative(leftDir, stepsToFrame - 1)
     }
 
     private fun calculateWidth(bottomLeft: Block, rightDir: BlockFace): Int {
-        val width = getDistanceUntilEdgeAboveFrame(bottomLeft, rightDir)
+        val width = traceRowToFrame(bottomLeft, rightDir)
         return if (width in MIN_WIDTH..MAX_WIDTH) width else 0
     }
 
-    private fun getDistanceUntilEdgeAboveFrame(pos: Block, direction: BlockFace): Int {
+    private fun traceRowToFrame(pos: Block, direction: BlockFace): Int {
         for (step in 0..MAX_WIDTH) {
             val cur = pos.getRelative(direction, step)
             if (!isEmpty(cur)) {
-                if (isFrameBlock(cur)) return step
-                break
+                return if (isFrameBlock(cur)) step else -1
             }
             val below = cur.getRelative(BlockFace.DOWN)
-            if (!isFrameBlock(below)) break
+            if (!isFrameBlock(below)) return -1
         }
-        return 0
+        return -1
     }
 
     private fun calculateHeight(
