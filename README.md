@@ -19,6 +19,8 @@ Lock or unlock Nether and End dimensions on your Paper Minecraft server.
 - **Configurable messages** — all messages use MiniMessage format, fully customizable
 - **Command alias** — use `/eralock` or `/el` for quick access
 - **No world name dependency** — works regardless of world names or Multiverse setup
+- **Public API** — other plugins can lock/unlock dimensions via `EraLockAPI`
+- **Player announcements** — broadcast + actionbar notifications on lock/unlock (configurable)
 
 ## Requirements
 
@@ -46,6 +48,15 @@ Lock or unlock Nether and End dimensions on your Paper Minecraft server.
 
 - `the_nether` — the Nether dimension
 - `the_end` — the End dimension
+- `announce:true|false` — (optional, last argument) override the `toggle-announce` config for this command
+
+#### Examples
+
+```
+/el lock the_nether announce:true   # lock + broadcast & actionbar
+/el unlock the_end announce:false   # unlock, no announcement
+/el unlock the_nether               # unlock, announcement follows config
+```
 
 ## Permissions
 
@@ -88,11 +99,14 @@ lock:
   nether: false
   the_end: false
 
+# Toggle announcement broadcasts + actionbars when locking/unlocking
+toggle-announce: true
+
 # All user-facing messages (MiniMessage format)
 # Use {dimension} as placeholder for the dimension name
 messages:
   no-permission: "<red>You don't have permission to use this command!</red>"
-  usage: "<red>Usage:</red> /<cyan>eralock</cyan> <lock | unlock | reload> <the_nether | the_end>"
+  usage: "<red>Usage:</red> /<cyan>eralock</cyan> <lock | unlock | reload> <the_nether | the_end> [announce:true|false]"
   locked: "<green>Dimension <cyan>{dimension}</cyan> has been locked!</green>"
   unlocked: "<green>Dimension <cyan>{dimension}</cyan> has been unlocked!</green>"
   already-locked: "<yellow>Dimension <cyan>{dimension}</cyan> is already locked!</yellow>"
@@ -100,10 +114,17 @@ messages:
   unknown-dimension: "<red>Unknown dimension! Use <cyan>the_nether</cyan> or <cyan>the_end</cyan>.</red>"
   config-reloaded: "<green>Configuration reloaded successfully!</green>"
   dimension-closed-kicked: "<red>This dimension is currently locked — you have been teleported to the overworld.</red>"
+
+  # Broadcast messages (sent to all online players in chat)
+  broadcast-locked: "<gold>Notice!</gold> <yellow>{dimension}</yellow><red> has been locked by an administrator!</red>"
+  broadcast-unlocked: "<gold>Notice!</gold> <yellow>{dimension}</yellow><green> has been unlocked by an administrator!</green>"
+
+  # Actionbar messages (shown briefly above the hotbar)
+  actionbar-locked: "<red>{dimension} locked!</red>"
+  actionbar-unlocked: "<green>{dimension} unlocked!</green>"
 ```
 
-All messages support [MiniMessage format](https://docs.advntr.dev/minimessage/format.html). Use `{dimension}` as a
-placeholder for the dimension name.
+All messages support [MiniMessage format](https://docs.advntr.dev/minimessage/format.html). Use `{dimension}` as a placeholder for the dimension name.
 
 ---
 
@@ -122,6 +143,10 @@ messages:
   unknown-dimension: "ᴄʜɪềᴜ ᴋʜôɴɢ ɢɪᴀɴ ᴋʜôɴɢ хáᴄ địɴʜ! ᴅùɴɢ <cyan>the_nether</cyan> ʜᴏặᴄ <cyan>the_end</cyan>."
   config-reloaded: "đã ᴛảɪ ʟạɪ ᴄấᴜ ʜìɴʜ!"
   dimension-closed-kicked: "ᴄʜɪềᴜ ᴋʜôɴɢ ɢɪᴀɴ ɴàʏ đã đóɴɢ, ʙạɴ đã đượᴄ đưᴀ ᴠề ᴏᴠᴇʀᴡᴏʀʟᴅ."
+  broadcast-locked: "ᴄʜɪềᴜ ᴋʜôɴɢ ɢɪᴀɴ <yellow>{dimension}</yellow> đã ʙị ᴋʜóᴀ ʙởɪ ǫᴜảɴ ᴛʀị ᴠɪêɴ!"
+  broadcast-unlocked: "ᴄʜɪềᴜ ᴋʜôɴɢ ɢɪᴀɴ <yellow>{dimension}</yellow> đã đượᴄ ᴍở ᴋʜóᴀ ʙởɪ ǫᴜảɴ ᴛʀị ᴠɪêɴ!"
+  actionbar-locked: "<red>{dimension} ᴋʜóᴀ!</red>"
+  actionbar-unlocked: "<green>{dimension} ᴍở ᴋʜóᴀ!</green>"
 ```
 
 ---
@@ -132,7 +157,9 @@ messages:
 ./gradlew build
 ```
 
-The compiled JAR will be in `build/libs/`.
+The compiled JAR will be in `core/build/libs/`.
+
+---
 
 ## License
 

@@ -9,6 +9,7 @@ import org.bukkit.event.Listener
 import org.bukkit.event.block.Action
 import org.bukkit.event.block.BlockDispenseEvent
 import org.bukkit.event.player.PlayerInteractEvent
+import tech.qhuyy.eraLock.api.WorldType
 import tech.qhuyy.eraLock.config.LockConfig
 
 class EndPortalBlockListener(
@@ -22,8 +23,8 @@ class EndPortalBlockListener(
         if (block.type != Material.END_PORTAL_FRAME) return
         val item = e.item ?: return
         if (item.type != Material.ENDER_EYE) return
-        if (!lockConfig.isEndLocked()) return
-        if (e.player.hasPermission("eralock.bypass.the_end")) return
+        if (!lockConfig.isLocked(WorldType.THE_END)) return
+        if (e.player.hasPermission(WorldType.THE_END.bypassPermission)) return
         val frameData = block.blockData as? EndPortalFrame ?: return
         if (frameData.hasEye()) return
         e.isCancelled = true
@@ -32,7 +33,7 @@ class EndPortalBlockListener(
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     fun onDispense(e: BlockDispenseEvent) {
         if (e.item.type != Material.ENDER_EYE) return
-        if (!lockConfig.isEndLocked()) return
+        if (!lockConfig.isLocked(WorldType.THE_END)) return
         val dispenserData = e.block.blockData
         val facing = (dispenserData as? Dispenser)?.facing ?: return
         val targetBlock = e.block.getRelative(facing)

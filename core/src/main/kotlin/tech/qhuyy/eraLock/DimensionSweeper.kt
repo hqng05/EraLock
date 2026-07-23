@@ -5,22 +5,29 @@ import org.bukkit.Location
 import org.bukkit.World
 import org.bukkit.entity.Player
 import org.bukkit.scheduler.BukkitTask
+import tech.qhuyy.eraLock.api.WorldType
 
 class DimensionSweeper(private val plugin: EraLock) {
 
-    private val activeTasks = mutableMapOf<World.Environment, BukkitTask>()
+    private val activeTasks = mutableMapOf<WorldType, BukkitTask>()
 
-    fun startSweeping(environment: World.Environment, bypassPermission: String) {
-        stopSweeping(environment)
-        sweep(environment, bypassPermission)
+    fun startSweeping(worldType: WorldType) {
+        stopSweeping(worldType)
+        val environment = environmentOf(worldType) ?: return
+        sweep(environment, worldType.bypassPermission)
         val task = Bukkit.getScheduler().runTaskTimer(plugin, Runnable {
-            sweep(environment, bypassPermission)
+            sweep(environment, worldType.bypassPermission)
         }, 100L, 100L)
-        activeTasks[environment] = task
+        activeTasks[worldType] = task
     }
 
-    fun stopSweeping(environment: World.Environment) {
-        activeTasks.remove(environment)?.cancel()
+    fun stopSweeping(worldType: WorldType) {
+        activeTasks.remove(worldType)?.cancel()
+    }
+
+    private fun environmentOf(worldType: WorldType): World.Environment? = when (worldType) {
+        WorldType.THE_NETHER -> World.Environment.NETHER
+        WorldType.THE_END -> World.Environment.THE_END
     }
 
     private fun sweep(environment: World.Environment, bypassPermission: String) {

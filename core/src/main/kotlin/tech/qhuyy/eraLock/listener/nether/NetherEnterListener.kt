@@ -1,4 +1,4 @@
-package tech.qhuyy.eraLock.listener.end
+package tech.qhuyy.eraLock.listener.nether
 
 import org.bukkit.World
 import org.bukkit.event.EventHandler
@@ -6,19 +6,20 @@ import org.bukkit.event.EventPriority
 import org.bukkit.event.Listener
 import org.bukkit.event.player.PlayerPortalEvent
 import org.bukkit.event.player.PlayerTeleportEvent
+import tech.qhuyy.eraLock.api.WorldType
 import tech.qhuyy.eraLock.config.LockConfig
 
-class EndEnterListener(
+class NetherEnterListener(
     private val lockConfig: LockConfig
 ) : Listener {
 
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     fun onPortal(event: PlayerPortalEvent) {
-        if (event.cause != PlayerTeleportEvent.TeleportCause.END_PORTAL) return
+        if (event.cause != PlayerTeleportEvent.TeleportCause.NETHER_PORTAL) return
         val toWorld = event.to.world ?: return
-        if (toWorld.environment != World.Environment.THE_END) return
-        if (!lockConfig.isEndLocked()) return
-        if (event.player.hasPermission("eralock.bypass.the_end")) return
+        if (toWorld.environment != World.Environment.NETHER) return
+        if (!lockConfig.isLocked(WorldType.THE_NETHER)) return
+        if (event.player.hasPermission(WorldType.THE_NETHER.bypassPermission)) return
         event.isCancelled = true
     }
 }

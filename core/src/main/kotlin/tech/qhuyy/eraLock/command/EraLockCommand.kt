@@ -1,11 +1,11 @@
 package tech.qhuyy.eraLock.command
 
-import org.bukkit.World
 import org.bukkit.command.Command
 import org.bukkit.command.CommandExecutor
 import org.bukkit.command.CommandSender
 import org.bukkit.command.TabCompleter
 import tech.qhuyy.eraLock.EraLock
+import tech.qhuyy.eraLock.api.WorldType
 import tech.qhuyy.eraLock.config.LockConfig
 import tech.qhuyy.eraLock.config.Messages
 
@@ -33,34 +33,38 @@ class EraLockCommand(
         return true
     }
 
+    private fun parseWorldType(raw: String): WorldType? = when (raw.lowercase()) {
+        "the_nether" -> WorldType.THE_NETHER
+        "the_end" -> WorldType.THE_END
+        else -> null
+    }
+
+    private fun parseAnnounceOverride(args: Array<String>): Boolean? {
+        if (args.size < 3) return null
+        val raw = args[2].lowercase().removePrefix("announce:")
+        return when (raw) {
+            "true" -> true
+            "false" -> false
+            else -> null
+        }
+    }
+
     private fun handleLock(sender: CommandSender, args: Array<String>) {
         if (args.size < 2) {
             sender.sendMessage(messages.usage())
             return
         }
-        when (args[1].lowercase()) {
-            "the_nether" -> {
-                if (lockConfig.isNetherLocked()) {
-                    sender.sendMessage(messages.alreadyLocked("Nether"))
-                    return
-                }
-                lockConfig.setNetherLocked(true)
-                plugin.dimensionSweeper.startSweeping(World.Environment.NETHER, "eralock.bypass.the_nether")
-                sender.sendMessage(messages.locked("Nether"))
-            }
-
-            "the_end" -> {
-                if (lockConfig.isEndLocked()) {
-                    sender.sendMessage(messages.alreadyLocked("The End"))
-                    return
-                }
-                lockConfig.setEndLocked(true)
-                plugin.dimensionSweeper.startSweeping(World.Environment.THE_END, "eralock.bypass.the_end")
-                sender.sendMessage(messages.locked("The End"))
-            }
-
-            else -> sender.sendMessage(messages.unknownDimension())
+        val worldType = parseWorldType(args[1]) ?: run {
+            sender.sendMessage(messages.unknownDimension())
+            return
         }
+        if (lockConfig.isLocked(worldType)) {
+            sender.sendMessage(messages.alreadyLocked(worldType.displayName))
+            return
+        }
+        val announce = parseAnnounceOverride(args)
+        plugin.lock(worldType, announce)
+        sender.sendMessage(messages.locked(worldType.displayName))
     }
 
     private fun handleUnlock(sender: CommandSender, args: Array<String>) {
@@ -68,34 +72,24 @@ class EraLockCommand(
             sender.sendMessage(messages.usage())
             return
         }
-        when (args[1].lowercase()) {
-            "the_nether" -> {
-                if (!lockConfig.isNetherLocked()) {
-                    sender.sendMessage(messages.alreadyUnlocked("Nether"))
-                    return
-                }
-                lockConfig.setNetherLocked(false)
-                plugin.dimensionSweeper.stopSweeping(World.Environment.NETHER)
-                sender.sendMessage(messages.unlocked("Nether"))
-            }
-
-            "the_end" -> {
-                if (!lockConfig.isEndLocked()) {
-                    sender.sendMessage(messages.alreadyUnlocked("The End"))
-                    return
-                }
-                lockConfig.setEndLocked(false)
-                plugin.dimensionSweeper.stopSweeping(World.Environment.THE_END)
-                sender.sendMessage(messages.unlocked("The End"))
-            }
-
-            else -> sender.sendMessage(messages.unknownDimension())
+        val worldType = parseWorldType(args[1]) ?: run {
+            sender.sendMessage(messages.unknownDimension())
+            return
         }
+        if (!lockConfig.isLocked(worldType)) {
+            sender.sendMessage(messages.alreadyUnlocked(worldType.displayName))
+            return
+        }
+        val announce = parseAnnounceOverride(args)
+        plugin.unlock(worldType, announce)
+        sender.sendMessage(messages.unlocked(worldType.displayName))
     }
 
     private fun handleReload(sender: CommandSender) {
         plugin.reloadConfig()
+        lockConfig.reload()
         messages.reload()
+        plugin.reconcileSweeping()
         sender.sendMessage(messages.configReloaded())
     }
 
@@ -112,17 +106,21 @@ class EraLockCommand(
         if (args.size == 2) {
             return when (args[0].lowercase()) {
                 "lock" -> buildList {
-                    if (!lockConfig.isNetherLocked()) add("the_nether")
-                    if (!lockConfig.isEndLocked()) add("the_end")
+                    if (!lockConfig.isLocked(WorldType.THE_NETHER)) add("the_nether")
+                    if (!lockConfig.isLocked(WorldType.THE_END)) add("the_end")
                 }.filter { it.startsWith(args[1], ignoreCase = true) }
 
                 "unlock" -> buildList {
-                    if (lockConfig.isNetherLocked()) add("the_nether")
-                    if (lockConfig.isEndLocked()) add("the_end")
+                    if (lockConfig.isLocked(WorldType.THE_NETHER)) add("the_nether")
+                    if (lockConfig.isLocked(WorldType.THE_END)) add("the_end")
                 }.filter { it.startsWith(args[1], ignoreCase = true) }
 
                 else -> emptyList()
             }
+        }
+        if (args.size == 3 && args[0].lowercase() in listOf("lock", "unlock")) {
+            return listOf("announce:true", "announce:false")
+                .filter { it.startsWith(args[2].lowercase()) }
         }
         return emptyList()
     }

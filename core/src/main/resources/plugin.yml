@@ -10,7 +10,7 @@ commands:
   eralock:
     aliases: [ el ]
     description: Lock or unlock Nether and End dimensions
-    usage: /<command> <lock|unlock|reload> [the_nether|the_end]
+    usage: /<command> <lock|unlock|reload> [the_nether|the_end] [announce:true|false]
     permission: eralock.admin
 
 permissions:
