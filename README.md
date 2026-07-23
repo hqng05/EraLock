@@ -91,6 +91,28 @@ lock:
 # All user-facing messages (MiniMessage format)
 # Use {dimension} as placeholder for the dimension name
 messages:
+  no-permission: "<red>You don't have permission to use this command!</red>"
+  usage: "<red>Usage:</red> /<cyan>eralock</cyan> <lock | unlock | reload> <the_nether | the_end>"
+  locked: "<green>Dimension <cyan>{dimension}</cyan> has been locked!</green>"
+  unlocked: "<green>Dimension <cyan>{dimension}</cyan> has been unlocked!</green>"
+  already-locked: "<yellow>Dimension <cyan>{dimension}</cyan> is already locked!</yellow>"
+  already-unlocked: "<yellow>Dimension <cyan>{dimension}</cyan> is already unlocked!</yellow>"
+  unknown-dimension: "<red>Unknown dimension! Use <cyan>the_nether</cyan> or <cyan>the_end</cyan>.</red>"
+  config-reloaded: "<green>Configuration reloaded successfully!</green>"
+  dimension-closed-kicked: "<red>This dimension is currently locked — you have been teleported to the overworld.</red>"
+```
+
+All messages support [MiniMessage format](https://docs.advntr.dev/minimessage/format.html). Use `{dimension}` as a
+placeholder for the dimension name.
+
+---
+
+### 🇻🇳 Vietnamese Example (Optional)
+
+If you prefer Vietnamese messages, you can replace the `messages` section with:
+
+```yaml
+messages:
   no-permission: "ʙạɴ ᴋʜôɴɢ ᴄó ǫᴜʏềɴ ᴛʜựᴄ ᴛʜɪ ʟệɴʜ ɴàʏ!"
   usage: "ᴄú ᴘʜáᴘ: /<cyan>ᴇʀᴀʟᴏᴄᴋ</cyan> < ʟᴏᴄᴋ | ᴜɴʟᴏᴄᴋ | ʀᴇʟᴏᴀᴅ > < ᴛʜᴇ_ɴᴇᴛʜᴇʀ | ᴛʜᴇ_ᴇɴᴅ >"
   locked: "ᴄʜɪềᴜ ᴋʜôɴɢ ɢɪᴀɴ <cyan>{dimension}</cyan> đã ʙị ᴋʜóᴀ"
@@ -102,8 +124,7 @@ messages:
   dimension-closed-kicked: "ᴄʜɪềᴜ ᴋʜôɴɢ ɢɪᴀɴ ɴàʏ đã đóɴɢ, ʙạɴ đã đượᴄ đưᴀ ᴠề ᴏᴠᴇʀᴡᴏʀʟᴅ."
 ```
 
-All messages support [MiniMessage format](https://docs.advntr.dev/minimessage/format.html). Use `{dimension}` as a
-placeholder for the dimension name.
+---
 
 ## Build
 
