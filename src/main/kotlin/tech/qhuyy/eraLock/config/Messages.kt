@@ -35,4 +35,5 @@ class Messages(private val plugin: EraLock) {
     fun alreadyUnlocked(dim: String) = resolve("already-unlocked", "dimension" to dim)
     fun unknownDimension() = resolve("unknown-dimension")
     fun configReloaded() = resolve("config-reloaded")
+    fun dimensionClosedKicked() = resolve("dimension-closed-kicked")
 }

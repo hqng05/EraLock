@@ -17,3 +17,15 @@ permissions:
   eralock.admin:
     description: Allows using /eralock and /el commands
     default: op
+  eralock.bypass.the_nether:
+    description: Allows entering, creating portals, and staying in the Nether while it is locked
+    default: op
+  eralock.bypass.the_end:
+    description: Allows entering, inserting eyes of ender, and staying in the End while it is locked
+    default: op
+  eralock.bypass.*:
+    description: Grants all EraLock bypass permissions
+    default: op
+    children:
+      eralock.bypass.the_nether: true
+      eralock.bypass.the_end: true

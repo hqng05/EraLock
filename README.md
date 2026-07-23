@@ -5,9 +5,12 @@ Lock or unlock Nether and End dimensions on your Paper Minecraft server.
 ## Features
 
 - **Lock dimensions** — prevent players from entering the Nether or the End
-- **Portal blocking** — prevents portal creation (ignite) when Nether is locked
+- **Auto-sweep** — automatically teleports players out of a dimension when it gets locked, and keeps sweeping every few seconds for as long as it stays locked (catches anyone who slips in through race conditions or other plugins)
+- **Smart teleport destination** — sweeps players to their bed/respawn location first, falling back to the overworld's spawn point
+- **Portal blocking** — prevents Nether portal creation (ignite) when the Nether is locked
 - **Eye of Ender blocking** — prevents inserting eyes into End Portal Frames when The End is locked
 - **Dispenser protection** — prevents dispensers from inserting eyes into End Portal Frames
+- **Bypass permissions** — grant specific players or admins the ability to enter, build portals in, and stay in a locked dimension
 - **Per-dimension control** — lock Nether and The End independently
 - **Configurable messages** — all messages use MiniMessage format, fully customizable
 - **Command alias** — use `/eralock` or `/el` for quick access
@@ -30,10 +33,10 @@ Lock or unlock Nether and End dimensions on your Paper Minecraft server.
 ## Commands
 
 | Command                       | Alias                    | Description          | Permission      |
-|-------------------------------|--------------------------|----------------------|-----------------|
-| `/eralock lock <dimension>`   | `/el lock <dimension>`   | Lock a dimension     | `eralock.admin` |
-| `/eralock unlock <dimension>` | `/el unlock <dimension>` | Unlock a dimension   | `eralock.admin` |
-| `/eralock reload`             | `/el reload`             | Reload configuration | `eralock.admin` |
+|--------------------------------|--------------------------|-----------------------|-----------------|
+| `/eralock lock <dimension>`   | `/el lock <dimension>`   | Lock a dimension      | `eralock.admin` |
+| `/eralock unlock <dimension>` | `/el unlock <dimension>` | Unlock a dimension    | `eralock.admin` |
+| `/eralock reload`             | `/el reload`             | Reload configuration  | `eralock.admin` |
 
 ### Arguments
 
@@ -43,8 +46,22 @@ Lock or unlock Nether and End dimensions on your Paper Minecraft server.
 ## Permissions
 
 ```
-eralock.admin — Allows using /eralock and /el commands (default: op)
+eralock.admin              — Allows using /eralock and /el commands (default: op)
+eralock.bypass.the_nether  — Allows entering, creating portals, and staying in the Nether while locked (default: op)
+eralock.bypass.the_end     — Allows entering, inserting eyes of ender, and staying in the End while locked (default: op)
+eralock.bypass.*           — Grants all bypass permissions above (default: op)
 ```
+
+## How locking works
+
+When you lock a dimension:
+
+1. Every online player currently in that dimension (without bypass permission) is immediately teleported out — to their bed/respawn location if set, otherwise to the overworld's spawn point.
+2. A recurring sweep keeps running every ~5 seconds for as long as the dimension stays locked, catching any player who manages to enter afterward (e.g. through another plugin, a race condition, or an admin-placed portal).
+3. New portal creation (Nether ignite / End eye of ender) is blocked at the source.
+4. Players with the relevant `eralock.bypass.*` permission are skipped entirely — they can enter, build portals, and stay without being swept.
+
+Unlocking a dimension stops its sweep task and re-enables normal portal creation immediately.
 
 ## Configuration
 
@@ -78,6 +95,7 @@ messages:
   already-unlocked: "ᴄʜɪềᴜ ᴋʜôɴɢ ɢɪᴀɴ <cyan>{dimension}</cyan> đᴀɴɢ ᴋʜôɴɢ ʙị ᴋʜóᴀ!"
   unknown-dimension: "ᴄʜɪềᴜ ᴋʜôɴɢ ɢɪᴀɴ ᴋʜôɴɢ хáᴄ địɴʜ! ᴅùɴɢ <cyan>the_nether</cyan> ʜᴏặᴄ <cyan>the_end</cyan>."
   config-reloaded: "đã ᴛảɪ ʟạɪ ᴄấᴜ ʜìɴʜ!"
+  dimension-closed-kicked: "ᴄʜɪềᴜ ᴋʜôɴɢ ɢɪᴀɴ ɴàʏ đã đóɴɢ, ʙạɴ đã đượᴄ đưᴀ ᴠề ᴏᴠᴇʀᴡᴏʀʟᴅ."
 ```
 
 All messages support [MiniMessage format](https://docs.advntr.dev/minimessage/format.html). Use `{dimension}` as a

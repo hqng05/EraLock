@@ -17,6 +17,8 @@ class EndEnterListener(
         if (event.cause != PlayerTeleportEvent.TeleportCause.END_PORTAL) return
         val toWorld = event.to.world ?: return
         if (toWorld.environment != World.Environment.THE_END) return
-        if (lockConfig.isEndLocked()) event.isCancelled = true
+        if (!lockConfig.isEndLocked()) return
+        if (event.player.hasPermission("eralock.bypass.the_end")) return
+        event.isCancelled = true
     }
 }

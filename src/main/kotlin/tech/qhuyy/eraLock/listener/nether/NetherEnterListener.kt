@@ -17,6 +17,8 @@ class NetherEnterListener(
         if (event.cause != PlayerTeleportEvent.TeleportCause.NETHER_PORTAL) return
         val toWorld = event.to.world ?: return
         if (toWorld.environment != World.Environment.NETHER) return
-        if (lockConfig.isNetherLocked()) event.isCancelled = true
+        if (!lockConfig.isNetherLocked()) return
+        if (event.player.hasPermission("eralock.bypass.the_nether")) return
+        event.isCancelled = true
     }
 }
