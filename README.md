@@ -2,12 +2,16 @@
 
 Lock or unlock Nether and End dimensions on your Paper Minecraft server.
 
-## Features
-
+> **Features**
+>
+> **Unlike most "portal lock" plugins that simply cancel the ignition event**, EraLock actually validates the entire Nether portal structure — using a custom rewrite of NMS logic. This means:
+> *   **No false positives**: If a portal isn't fully formed, we won't block it prematurely.
+> *   **Accurate detection**: Works reliably even with custom portal shapes or when other plugins interfere.
+>
+> **Other key features include:**
 - **Lock dimensions** — prevent players from entering the Nether or the End
 - **Auto-sweep** — automatically teleports players out of a dimension when it gets locked, and keeps sweeping every few seconds for as long as it stays locked (catches anyone who slips in through race conditions or other plugins)
 - **Smart teleport destination** — sweeps players to their bed/respawn location first, falling back to the overworld's spawn point
-- **Portal blocking** — prevents Nether portal creation (ignite) when the Nether is locked
 - **Eye of Ender blocking** — prevents inserting eyes into End Portal Frames when The End is locked
 - **Dispenser protection** — prevents dispensers from inserting eyes into End Portal Frames
 - **Bypass permissions** — grant specific players or admins the ability to enter, build portals in, and stay in a locked dimension
