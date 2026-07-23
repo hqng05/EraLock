@@ -15,7 +15,7 @@ class NetherEnterListener(
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     fun onPortal(event: PlayerPortalEvent) {
         if (event.cause != PlayerTeleportEvent.TeleportCause.NETHER_PORTAL) return
-        val toWorld = event.to?.world ?: return
+        val toWorld = event.to.world ?: return
         if (toWorld.environment != World.Environment.NETHER) return
         if (lockConfig.isNetherLocked()) event.isCancelled = true
     }
