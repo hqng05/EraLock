@@ -23,6 +23,31 @@ tasks {
         dependsOn(shadowJar)
     }
 
+    jar {
+        archiveBaseName.set("EraLock")
+        archiveClassifier.set("source")
+    }
+
+    shadowJar {
+        archiveBaseName.set("EraLock")
+        archiveClassifier.set("")
+
+        relocate("kotlin", "tech.qhuyy.eraLock.libs.kotlin")
+
+        exclude("META-INF/*.kotlin_module")
+        exclude("**/*.kotlin_builtins")
+        exclude("**/*.kotlin_metadata")
+        exclude("META-INF/maven/**")
+        exclude("META-INF/LICENSE*")
+        exclude("META-INF/NOTICE*")
+        exclude("META-INF/DEPENDENCIES")
+        exclude("module-info.class")
+        exclude("**/*.dsa")
+        exclude("**/*.rsa")
+        exclude("**/*.sf")
+        minimize()
+    }
+
     runServer {
         minecraftVersion(libs.versions.minecraft.get())
         jvmArgs("-Xms2G", "-Xmx2G", "-Dcom.mojang.eula.agree=true")
