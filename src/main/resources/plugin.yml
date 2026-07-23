@@ -1,10 +1,8 @@
 name: EraLock
 version: '${version}'
-
 main: tech.qhuyy.eraLock.EraLock
 api-version: '26.2'
 load: POSTWORLD
-
 authors: [ qhuyy ]
 website: https://qhuyy.tech
 
