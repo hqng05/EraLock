@@ -5,26 +5,24 @@
 
 # Prefix that appears before every message
 # Supports MiniMessage format: https://docs.advntr.dev/minimessage/format.html
-prefix: "<gold>[EraLock]</gold>"
+prefix: "[ <gradient:#FFFFFF:#FF008A>ᴇʀᴀʟᴏᴄᴋ</gradient> ]<reset>"
 
 # Whether to show the prefix before messages
 prefix-enabled: true
 
-# Lock state for each dimension (default: locked)
+# Lock state for each dimension (default: unlocked)
 lock:
-  nether: true
-  the_end: true
+  nether: false
+  the_end: false
 
 # All user-facing messages (MiniMessage format)
 # Use {dimension} as placeholder for the dimension name
 messages:
-  no-permission: "<red>You don't have permission!</red>"
-  usage: "<gold>/eralock <lock|unlock|reload> <the_nether|the_end></gold>"
-  locked: "<green>✔ Locked <yellow>{dimension}</yellow></green>"
-  unlocked: "<green>✔ Unlocked <yellow>{dimension}</yellow></green>"
-  already-locked: "<yellow>{dimension} is already locked!</yellow>"
-  already-unlocked: "<yellow>{dimension} is already unlocked!</yellow>"
-  unknown-dimension: "<red>Unknown dimension! Use the_nether or the_end.</red>"
-  config-reloaded: "<green>Configuration reloaded!</green>"
-  plugin-enabled: "<gold>EraLock enabled</gold>"
-  plugin-disabled: "<gold>EraLock disabled</gold>"
+  no-permission: "ʙạɴ ᴋʜôɴɢ ᴄó ǫᴜʏềɴ ᴛʜựᴄ ᴛʜɪ ʟệɴʜ ɴàʏ!"
+  usage: "ᴄú ᴘʜáᴘ: /<cyan>ᴇʀᴀʟᴏᴄᴋ</cyan> < ʟᴏᴄᴋ | ᴜɴʟᴏᴄᴋ | ʀᴇʟᴏᴀᴅ > < ᴛʜᴇ_ɴᴇᴛʜᴇʀ | ᴛʜᴇ_ᴇɴᴅ >"
+  locked: "ᴄʜɪềᴜ ᴋʜôɴɢ ɢɪᴀɴ <cyan>{dimension}</cyan> đã ʙị ᴋʜóᴀ"
+  unlocked: "ᴄʜɪềᴜ ᴋʜôɴɢ ɢɪᴀɴ <cyan>{dimension}</cyan> đã đượᴄ ᴍở ᴋʜóᴀ"
+  already-locked: "ᴄʜɪềᴜ ᴋʜôɴɢ ɢɪᴀɴ <cyan>{dimension}</cyan> đᴀɴɢ ʙị ᴋʜóᴀ ʀồɪ!"
+  already-unlocked: "ᴄʜɪềᴜ ᴋʜôɴɢ ɢɪᴀɴ <cyan>{dimension}</cyan> đᴀɴɢ ᴋʜôɴɢ ʙị ᴋʜóᴀ!"
+  unknown-dimension: "ᴄʜɪềᴜ ᴋʜôɴɢ ɢɪᴀɴ ᴋʜôɴɢ хáᴄ địɴʜ! ᴅùɴɢ <cyan>the_nether</cyan> ʜᴏặᴄ <cyan>the_end</cyan>."
+  config-reloaded: "đã ᴛảɪ ʟạɪ ᴄấᴜ ʜìɴʜ!"
