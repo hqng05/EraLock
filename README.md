@@ -22,10 +22,10 @@ Lock or unlock Nether and End dimensions on your Paper Minecraft server.
 
 ## Requirements
 
-- **Paper** 26.x or newer (or compatible Paper fork)
-- **Java** 25 or newer
+- **Paper** 1.20.x or newer (or compatible Paper fork)
+- **Java** 21 or newer
 
-> **Note:** Built with Java 25 because that's what I had handy. I'll work on backporting to support versions 1.20.x through 26.x.
+> **Folia** soon!
 
 ## Installation
 
