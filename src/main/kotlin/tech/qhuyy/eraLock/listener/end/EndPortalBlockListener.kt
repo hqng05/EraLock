@@ -23,6 +23,7 @@ class EndPortalBlockListener(
         val item = e.item ?: return
         if (item.type != Material.ENDER_EYE) return
         if (!lockConfig.isEndLocked()) return
+        if (e.player.hasPermission("eralock.bypass.the_end")) return
         val frameData = block.blockData as? EndPortalFrame ?: return
         if (frameData.hasEye()) return
         e.isCancelled = true

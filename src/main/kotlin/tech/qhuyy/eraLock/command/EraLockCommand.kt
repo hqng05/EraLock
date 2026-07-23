@@ -1,5 +1,6 @@
 package tech.qhuyy.eraLock.command
 
+import org.bukkit.World
 import org.bukkit.command.Command
 import org.bukkit.command.CommandExecutor
 import org.bukkit.command.CommandSender
@@ -44,6 +45,7 @@ class EraLockCommand(
                     return
                 }
                 lockConfig.setNetherLocked(true)
+                plugin.dimensionSweeper.startSweeping(World.Environment.NETHER, "eralock.bypass.the_nether")
                 sender.sendMessage(messages.locked("Nether"))
             }
 
@@ -53,6 +55,7 @@ class EraLockCommand(
                     return
                 }
                 lockConfig.setEndLocked(true)
+                plugin.dimensionSweeper.startSweeping(World.Environment.THE_END, "eralock.bypass.the_end")
                 sender.sendMessage(messages.locked("The End"))
             }
 
@@ -72,6 +75,7 @@ class EraLockCommand(
                     return
                 }
                 lockConfig.setNetherLocked(false)
+                plugin.dimensionSweeper.stopSweeping(World.Environment.NETHER)
                 sender.sendMessage(messages.unlocked("Nether"))
             }
 
@@ -81,6 +85,7 @@ class EraLockCommand(
                     return
                 }
                 lockConfig.setEndLocked(false)
+                plugin.dimensionSweeper.stopSweeping(World.Environment.THE_END)
                 sender.sendMessage(messages.unlocked("The End"))
             }
 
