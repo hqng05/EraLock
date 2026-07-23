@@ -1,6 +1,5 @@
 package tech.qhuyy.eraLock
 
-import org.bukkit.Bukkit
 import org.bukkit.World
 import org.bukkit.plugin.java.JavaPlugin
 import tech.qhuyy.eraLock.command.EraLockCommand
@@ -25,13 +24,6 @@ class EraLock : JavaPlugin() {
         registerEvents()
         registerCommand()
         resumeSweeping()
-        Bukkit.getConsoleSender().sendMessage(messages.pluginEnabled())
-    }
-
-    override fun onDisable() {
-        if (::messages.isInitialized) {
-            Bukkit.getConsoleSender().sendMessage(messages.pluginDisabled())
-        }
     }
 
     private fun resumeSweeping() {
