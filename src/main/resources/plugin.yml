@@ -7,3 +7,15 @@ load: POSTWORLD
 
 authors: [ qhuyy ]
 website: https://qhuyy.tech
+
+commands:
+  eralock:
+    aliases: [ el ]
+    description: Lock or unlock Nether and End dimensions
+    usage: /<command> <lock|unlock|reload> [the_nether|the_end]
+    permission: eralock.admin
+
+permissions:
+  eralock.admin:
+    description: Allows using /eralock and /el commands
+    default: op
