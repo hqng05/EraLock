@@ -2,7 +2,6 @@ plugins {
     kotlin("jvm") version libs.versions.kotlin.get()
     alias(libs.plugins.shadow)
     alias(libs.plugins.run.paper)
-    kotlin("plugin.serialization") version libs.versions.kotlin.get()
 }
 
 repositories {
@@ -13,7 +12,6 @@ repositories {
 dependencies {
     compileOnly(libs.paper.api)
     implementation(libs.kotlin.stdlib)
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.7.3")
 }
 
 kotlin {
