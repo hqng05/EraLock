@@ -15,8 +15,10 @@ Lock or unlock Nether and End dimensions on your Paper Minecraft server.
 
 ## Requirements
 
-- **Paper** 1.26.2 or newer (or compatible Paper fork)
+- **Paper** 26.x or newer (or compatible Paper fork)
 - **Java** 25 or newer
+
+> **Note:** Built with Java 25 because that's what I had handy. I'll work on backporting to support versions 1.20.x through 26.x.
 
 ## Installation
 
@@ -27,18 +29,16 @@ Lock or unlock Nether and End dimensions on your Paper Minecraft server.
 
 ## Commands
 
-| Command | Alias | Description | Permission |
-|---------|-------|-------------|------------|
-| `/eralock lock <dimension>` | `/el lock <dimension>` | Lock a dimension | `eralock.admin` |
-| `/eralock unlock <dimension>` | `/el unlock <dimension>` | Unlock a dimension | `eralock.admin` |
-| `/eralock reload` | `/el reload` | Reload configuration | `eralock.admin` |
+| Command                       | Alias                    | Description          | Permission      |
+|-------------------------------|--------------------------|----------------------|-----------------|
+| `/eralock lock <dimension>`   | `/el lock <dimension>`   | Lock a dimension     | `eralock.admin` |
+| `/eralock unlock <dimension>` | `/el unlock <dimension>` | Unlock a dimension   | `eralock.admin` |
+| `/eralock reload`             | `/el reload`             | Reload configuration | `eralock.admin` |
 
 ### Arguments
 
 - `the_nether` — the Nether dimension
 - `the_end` — the End dimension
-
-Tab completion is state-aware: the command only suggests dimensions that can actually be locked/unlocked.
 
 ## Permissions
 
@@ -51,31 +51,37 @@ eralock.admin — Allows using /eralock and /el commands (default: op)
 File: `plugins/EraLock/config.yml`
 
 ```yaml
+# | EraLock Configuration                                                 |
+# | Lock or unlock Nether and End dimensions                              |
+# +-----------------------------------------------------------------------+
+
 # Prefix that appears before every message
-prefix: "<gold>[EraLock]</gold>"
+# Supports MiniMessage format: https://docs.advntr.dev/minimessage/format.html
+prefix: "[ <gradient:#FFFFFF:#FF008A>ᴇʀᴀʟᴏᴄᴋ</gradient> ]<reset>"
+
+# Whether to show the prefix before messages
 prefix-enabled: true
 
-# Lock state for each dimension (default: locked)
+# Lock state for each dimension (default: unlocked)
 lock:
-  nether: true
-  the_end: true
+  nether: false
+  the_end: false
 
 # All user-facing messages (MiniMessage format)
+# Use {dimension} as placeholder for the dimension name
 messages:
-  no-permission: "<red>You don't have permission!</red>"
-  usage: "<gold>/eralock <lock|unlock|reload> <the_nether|the_end></gold>"
-  locked: "<green>✔ Locked <yellow>{dimension}</yellow></green>"
-  unlocked: "<green>✔ Unlocked <yellow>{dimension}</yellow></green>"
-  already-locked: "<yellow>{dimension} is already locked!</yellow>"
-  already-unlocked: "<yellow>{dimension} is already unlocked!</yellow>"
-  unknown-dimension: "<red>Unknown dimension! Use the_nether or the_end.</red>"
-  config-reloaded: "<green>Configuration reloaded!</green>"
-  plugin-enabled: "<gold>EraLock enabled</gold>"
-  plugin-disabled: "<gold>EraLock disabled</gold>"
+  no-permission: "ʙạɴ ᴋʜôɴɢ ᴄó ǫᴜʏềɴ ᴛʜựᴄ ᴛʜɪ ʟệɴʜ ɴàʏ!"
+  usage: "ᴄú ᴘʜáᴘ: /<cyan>ᴇʀᴀʟᴏᴄᴋ</cyan> < ʟᴏᴄᴋ | ᴜɴʟᴏᴄᴋ | ʀᴇʟᴏᴀᴅ > < ᴛʜᴇ_ɴᴇᴛʜᴇʀ | ᴛʜᴇ_ᴇɴᴅ >"
+  locked: "ᴄʜɪềᴜ ᴋʜôɴɢ ɢɪᴀɴ <cyan>{dimension}</cyan> đã ʙị ᴋʜóᴀ"
+  unlocked: "ᴄʜɪềᴜ ᴋʜôɴɢ ɢɪᴀɴ <cyan>{dimension}</cyan> đã đượᴄ ᴍở ᴋʜóᴀ"
+  already-locked: "ᴄʜɪềᴜ ᴋʜôɴɢ ɢɪᴀɴ <cyan>{dimension}</cyan> đᴀɴɢ ʙị ᴋʜóᴀ ʀồɪ!"
+  already-unlocked: "ᴄʜɪềᴜ ᴋʜôɴɢ ɢɪᴀɴ <cyan>{dimension}</cyan> đᴀɴɢ ᴋʜôɴɢ ʙị ᴋʜóᴀ!"
+  unknown-dimension: "ᴄʜɪềᴜ ᴋʜôɴɢ ɢɪᴀɴ ᴋʜôɴɢ хáᴄ địɴʜ! ᴅùɴɢ <cyan>the_nether</cyan> ʜᴏặᴄ <cyan>the_end</cyan>."
+  config-reloaded: "đã ᴛảɪ ʟạɪ ᴄấᴜ ʜìɴʜ!"
 ```
 
-All messages support [MiniMessage format](https://docs.advntr.dev/minimessage/format.html).
-Use `{dimension}` as a placeholder for the dimension name.
+All messages support [MiniMessage format](https://docs.advntr.dev/minimessage/format.html). Use `{dimension}` as a
+placeholder for the dimension name.
 
 ## Build
 
@@ -87,8 +93,10 @@ The compiled JAR will be in `build/libs/`.
 
 ## License
 
-[MIT](LICENSE)
+MIT © [hqng05]
+
+This project is open source and available under the [MIT License](LICENSE). Feel free to use, modify, and distribute it — contributions are always welcome!
 
 ## Credits
 
-- [qhuyy](https://qhuyy.tech) — author
+[qhuyy](https://qhuyy.tech) — 100% caffeine-powered.
