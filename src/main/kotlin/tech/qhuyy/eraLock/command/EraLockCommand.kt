@@ -46,6 +46,7 @@ class EraLockCommand(
                 lockConfig.setNetherLocked(true)
                 sender.sendMessage(messages.locked("Nether"))
             }
+
             "the_end" -> {
                 if (lockConfig.isEndLocked()) {
                     sender.sendMessage(messages.alreadyLocked("The End"))
@@ -54,6 +55,7 @@ class EraLockCommand(
                 lockConfig.setEndLocked(true)
                 sender.sendMessage(messages.locked("The End"))
             }
+
             else -> sender.sendMessage(messages.unknownDimension())
         }
     }
@@ -72,6 +74,7 @@ class EraLockCommand(
                 lockConfig.setNetherLocked(false)
                 sender.sendMessage(messages.unlocked("Nether"))
             }
+
             "the_end" -> {
                 if (!lockConfig.isEndLocked()) {
                     sender.sendMessage(messages.alreadyUnlocked("The End"))
@@ -80,6 +83,7 @@ class EraLockCommand(
                 lockConfig.setEndLocked(false)
                 sender.sendMessage(messages.unlocked("The End"))
             }
+
             else -> sender.sendMessage(messages.unknownDimension())
         }
     }
@@ -106,10 +110,12 @@ class EraLockCommand(
                     if (!lockConfig.isNetherLocked()) add("the_nether")
                     if (!lockConfig.isEndLocked()) add("the_end")
                 }.filter { it.startsWith(args[1], ignoreCase = true) }
+
                 "unlock" -> buildList {
                     if (lockConfig.isNetherLocked()) add("the_nether")
                     if (lockConfig.isEndLocked()) add("the_end")
                 }.filter { it.startsWith(args[1], ignoreCase = true) }
+
                 else -> emptyList()
             }
         }
