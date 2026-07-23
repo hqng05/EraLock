@@ -15,7 +15,7 @@ class EndEnterListener(
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     fun onPortal(event: PlayerPortalEvent) {
         if (event.cause != PlayerTeleportEvent.TeleportCause.END_PORTAL) return
-        val toWorld = event.to?.world ?: return
+        val toWorld = event.to.world ?: return
         if (toWorld.environment != World.Environment.THE_END) return
         if (lockConfig.isEndLocked()) event.isCancelled = true
     }
