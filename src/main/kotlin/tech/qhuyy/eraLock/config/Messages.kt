@@ -12,7 +12,7 @@ class Messages(private val plugin: EraLock) {
 
     fun reload() {
         val cfg = plugin.config
-        prefix = mm.deserialize(cfg.getString("prefix", "<gold>[EraLock]</gold>"))
+        prefix = mm.deserialize(cfg.getString("prefix", "<gold>[EraLock]</gold>") ?: "<gold>[EraLock]</gold>")
         prefixEnabled = cfg.getBoolean("prefix-enabled", true)
     }
 
@@ -21,8 +21,8 @@ class Messages(private val plugin: EraLock) {
         if (raw.isNullOrBlank()) {
             return mm.deserialize("<red>Missing config: messages.$path</red>")
         }
-        var resolved = raw
-        pairs.forEach { (k, v) -> resolved = resolved?.replace("{$k}", v) }
+        var resolved: String = raw
+        pairs.forEach { (k, v) -> resolved = resolved.replace("{$k}", v) }
         val msg = mm.deserialize(resolved)
         return if (prefixEnabled) prefix.append(Component.space()).append(msg) else msg
     }
