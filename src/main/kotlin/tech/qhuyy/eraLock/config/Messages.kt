@@ -22,7 +22,7 @@ class Messages(private val plugin: EraLock) {
             return mm.deserialize("<red>Missing config: messages.$path</red>")
         }
         var resolved = raw
-        pairs.forEach { (k, v) -> resolved = resolved.replace("{$k}", v) }
+        pairs.forEach { (k, v) -> resolved = resolved?.replace("{$k}", v) }
         val msg = mm.deserialize(resolved)
         return if (prefixEnabled) prefix.append(Component.space()).append(msg) else msg
     }
@@ -35,6 +35,4 @@ class Messages(private val plugin: EraLock) {
     fun alreadyUnlocked(dim: String) = resolve("already-unlocked", "dimension" to dim)
     fun unknownDimension() = resolve("unknown-dimension")
     fun configReloaded() = resolve("config-reloaded")
-    fun pluginEnabled() = resolve("plugin-enabled")
-    fun pluginDisabled() = resolve("plugin-disabled")
 }
