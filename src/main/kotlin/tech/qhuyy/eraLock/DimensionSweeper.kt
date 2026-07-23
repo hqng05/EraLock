@@ -37,12 +37,16 @@ class DimensionSweeper(private val plugin: EraLock) {
 
     private fun teleportOut(player: Player, fallback: World) {
         val destination = resolveDestination(player, fallback)
-        player.teleport(destination)
-        player.sendMessage(plugin.messages.dimensionClosedKicked())
+        val success = player.teleport(destination)
+        if (success) {
+            player.sendMessage(plugin.messages.dimensionClosedKicked())
+        } else {
+            plugin.logger.warning("Failed to teleport ${player.name} from ${player.world.name} to ${destination.world?.name ?: "unknown"}")
+        }
     }
 
     private fun resolveDestination(player: Player, fallback: World): Location {
-        return player.respawnLocation
+        return player.getRespawnLocation(false)
             ?.takeIf { it.world?.environment == World.Environment.NORMAL }
             ?: fallback.spawnLocation
     }
